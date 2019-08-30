@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"><link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title>Document</title>
+    <script>
+        function setValor(box){
+            valorTotal = document.querySelector(".valor");
+            if(box.checked == true)
+                valorTotal.value = parseFloat(valorTotal.value) + parseFloat(box.value);
+            else
+            valorTotal.value = parseFloat(valorTotal.value) - parseFloat(box.value);
+        }
+
+        function validar(){
+            var valido = true;
+
+            var itens = document.getElementsByName("itens");
+
+            var itensMarcados = 0;
+            for(var i = 0; i < itens.length; i++){
+                if(itens[i].checked == true){
+                    itensMarcados ++;
+                }
+            }
+            if(itensMarcados == 0){
+                valido = false;
+            }
+
+            return valido;
+        }
+    </script>
+
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark"> 
+        <a class="navbar-brand" href="/">Loja</a> 
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/lista_clientes">Cliente</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/listar_itens">Produtos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/fazer_pedido">Fazer pedido</a>
+                </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0" method="POST" action="/formulario_item">
+                <input class="form-control mr-sm-2" type="submit" placeholder="Cadastrar" aria-label="Cadsatrar">
+            </form>
+        </div>
+    </nav>
+    <div class="container-fluid">
+        <div class="container">
+            <form action="/cadastrar_pedido" method="POST">
+                <label>Cliente: </label>
+                <select name="cliente" id="user">
+                    <option value="" th:each="cliente:${clientes}" th:value="${cliente.id}" th:text="${cliente.nome}"></option>
+                </select>
+                <label for="valor">Valor total: </label>
+                <input type="text" value="0" name="valor" id="valor" class="valor">
+                <label for="data">Data: </label>
+                <input type="date" class="data" name="data" id="data" value="19/07/2019">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Produto</th>
+                            <th scope="col">Preco(R$)</th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="item:${itens}">
+                            <th><input type="checkbox" name="itens" id="itens" th:value="${item.preco}" onclick="setValor(this)" th:text="${item.nome}"></th>
+                            <td th:text="${item.preco}+'R$'"></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <input type="submit" value="Envia" class="btn btn-success" onclick="return validar()">
+            </form>
+        </div>
+    </div>
+</body>
+</html>

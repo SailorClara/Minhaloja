@@ -4,6 +4,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 @Entity
 public class Item {
@@ -11,7 +14,12 @@ public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @NotBlank(message = "Campo obrigatorio")
     private String nome;
+
+    @NotNull(message = "Informe o valor")
+    @Positive(message = "Não pode valores negativos")
     private double preco;
 
     public Item(){
@@ -40,6 +48,9 @@ public class Item {
     public void setPreco(double preco) {
         this.preco = preco;
     }
+	public static boolean isPresent() {
+		return false;
+	}
 
     
 }
