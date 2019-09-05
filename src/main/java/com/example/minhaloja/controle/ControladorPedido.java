@@ -1,5 +1,10 @@
 package com.example.minhaloja.controle;
 
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import com.example.minhaloja.modelo.Cliente;
 import com.example.minhaloja.modelo.Item;
 import com.example.minhaloja.modelo.Pedido;
@@ -35,10 +40,17 @@ public class ControladorPedido{
     }
 
     @RequestMapping("/cadastrar_pedido")
-    public ModelAndView cadastrarPedido(String valor, RedirectAttributes redirect){
+    public ModelAndView cadastrarPedido(double valor, String itens, RedirectAttributes redirect, Cliente cliente, Date data){
         ModelAndView retorno = new ModelAndView("redirect:/fazer_pedido");
-        //repositorioPedido.save(pedido);
-        System.out.println(valor);
+        String itensIds[] = itens.split(",");
+        List<Item> itensPedido = new ArrayList<Item>();
+        for (String id : itensIds) {
+            Optional<Item> item = repositorioItem.findById(Long.parseLong(id));
+            valor += item.get().getPreco();
+            itensPedido.add(item.get());
+        }
+        Pedido pedido = new Pedido(cliente, itensPedido, data, valor);
+        repositorioPedido.save(pedido);
         return retorno;
     }
 }

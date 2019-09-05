@@ -89,7 +89,7 @@
                     </thead>
                     <tbody>
                         <tr th:each="item:${itens}">
-                            <th><input type="checkbox" name="itens" id="itens" th:value="${item.preco}" onclick="setValor(this)" th:text="${item.nome}"></th>
+                            <th><input type="checkbox" name="itens" id="itens" th:value="${item.id}" th:text="${item.nome}"></th>
                             <td th:text="${item.preco}+'R$'"></td>
                             <td></td>
                             <td></td>
